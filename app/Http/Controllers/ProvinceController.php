@@ -10,9 +10,13 @@ class ProvinceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $provinces = Province::all();
+        $q = $request->query('q', false);
+
+        $provinces = Province::when($q, function ($query) use ($q) {
+            $query->where('name', 'LIKE', "%{$q}%");
+        })->get();
 
         return response()->json([
             'provinces' => $provinces,

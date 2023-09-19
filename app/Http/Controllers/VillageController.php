@@ -10,9 +10,13 @@ class VillageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $villages = Village::all();
+        $q = $request->query('q', false);
+
+        $villages = Village::when($q, function ($query) use ($q) {
+            $query->where('name', 'LIKE', "%{$q}%");
+        })->get();
 
         return response()->json([
             'villages' => $villages,

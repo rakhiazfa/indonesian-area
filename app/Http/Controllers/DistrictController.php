@@ -10,9 +10,13 @@ class DistrictController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $districts = District::all();
+        $q = $request->query('q', false);
+
+        $districts = District::when($q, function ($query) use ($q) {
+            $query->where('name', 'LIKE', "%{$q}%");
+        })->get();
 
         return response()->json([
             'districts' => $districts,
