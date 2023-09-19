@@ -16,11 +16,9 @@ class DistrictController extends Controller
 
         $districts = District::when($q, function ($query) use ($q) {
             $query->where('name', 'LIKE', "%{$q}%");
-        })->get();
+        })->paginate(25);
 
-        return response()->json([
-            'districts' => $districts,
-        ]);
+        return response()->json($districts);
     }
 
     /**

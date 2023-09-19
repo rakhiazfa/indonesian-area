@@ -16,11 +16,9 @@ class VillageController extends Controller
 
         $villages = Village::when($q, function ($query) use ($q) {
             $query->where('name', 'LIKE', "%{$q}%");
-        })->get();
+        })->paginate(25);
 
-        return response()->json([
-            'villages' => $villages,
-        ]);
+        return response()->json($villages);
     }
 
     /**

@@ -16,11 +16,9 @@ class ProvinceController extends Controller
 
         $provinces = Province::when($q, function ($query) use ($q) {
             $query->where('name', 'LIKE', "%{$q}%");
-        })->get();
+        })->paginate(25);
 
-        return response()->json([
-            'provinces' => $provinces,
-        ]);
+        return response()->json($provinces);
     }
 
     /**

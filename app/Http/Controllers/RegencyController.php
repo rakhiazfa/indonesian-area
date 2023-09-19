@@ -16,11 +16,9 @@ class RegencyController extends Controller
 
         $regencies = Regency::when($q, function ($query) use ($q) {
             $query->where('name', 'LIKE', "%{$q}%");
-        })->get();
+        })->paginate(25);
 
-        return response()->json([
-            'regencies' => $regencies,
-        ]);
+        return response()->json($regencies);
     }
 
     /**
